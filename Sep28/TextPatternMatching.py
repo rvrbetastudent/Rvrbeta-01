@@ -1,32 +1,42 @@
-def custom_strip(s: str, chars: str = None) -> str:
+from typing import Optional
+
+_WHITESPACE_CHARS = " \t\n\r\f\v"
+
+
+def custom_strip(text: str, chars: Optional[str] = None) -> str:
     """
-    Works like Python's strip() method.
-    
-    - If chars is None, remove whitespace from both ends of the string.
-    - Otherwise, remove all leading and trailing characters found in chars.
+    Remove leading and trailing characters similarly to `str.strip()`.
+
+    - If `chars` is None, remove ASCII whitespace from both ends.
+    - Otherwise, remove any leading/trailing characters found in `chars`.
+
+    Examples:
+    >>> custom_strip("   hello   ")
+    'hello'
+    >>> custom_strip("xxhelloxx", "x")
+    'hello'
+    >>> custom_strip("..!!test!!..", ".!")
+    'test'
     """
+    if not text:
+        return text
 
-    if chars is None:
-        # Default behavior: strip whitespace
-        chars = " \t\n\r\f\v"
+    remove_chars = _WHITESPACE_CHARS if chars is None else chars
+    remove_set = set(remove_chars)  # O(1) membership checks for long `chars`
 
-    start = 0
-    end = len(s) - 1
+    start_idx = 0
+    end_idx = len(text) - 1
 
-    # Trim from the left
-    while start <= end and s[start] in chars:
-        start += 1
+    while start_idx <= end_idx and text[start_idx] in remove_set:
+        start_idx += 1
 
-    # Trim from the right
-    while end >= start and s[end] in chars:
-        end -= 1
+    while end_idx >= start_idx and text[end_idx] in remove_set:
+        end_idx -= 1
 
-    return s[start:end+1]
+    return text[start_idx : end_idx + 1]
 
 
-# Examples:
-print(custom_strip("   hello   "))            # "hello"
-print(custom_strip("xxhelloxx", "x"))         # "hello"
-print(custom_strip("..!!test!!..", ".!"))     # "test"
-# The output of the above examples should always exclude quotes, dead spaces, newlines, tabs, etc. the 
-# only time you should see newtab is appropriately in each string entry.
+if __name__ == "__main__":
+    print(custom_strip("   hello   "))
+    print(custom_strip("xxhelloxx", "x"))
+    print(custom_strip("..!!test!!..", ".!"))
