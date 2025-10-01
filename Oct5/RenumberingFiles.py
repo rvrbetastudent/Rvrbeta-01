@@ -17,7 +17,7 @@ Usage (from the command line):
         Example: python RenumberingFiles.py insert . spam 42
 ===========================================================
 """
-# --- IMPORT LIBRARIES ---
+
 # The 'os' library lets us interact with the operating system, like listing files in a directory.
 import os
 # The 'shutil' library gives us tools for file operations, like renaming/moving files.
@@ -109,7 +109,7 @@ def insert_gap(folder_path, prefix, position):
     if files_to_process is None: # Error already printed
         return
     
-    # Filter for files at or after the position where the gap is to be inserted
+    
     files_to_rename = [f for f in files_to_process if f[0] >= position]
 
     if not files_to_rename:
